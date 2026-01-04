@@ -1,0 +1,42 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write  # 关键：确保有写入权限
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build
+      run: npm run build
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        # 使用默认的GITHUB_TOKEN（确保仓库设置中启用了写入权限）
+        # github_token: ${{ secrets.GITHUB_TOKEN }}
+        # 从 github_token 改为 deploy_key 或使用 ACCESS_TOKEN
+        deploy_key: ${{ secrets.ACCESS_TOKEN }}
+        # 或者如果是公共仓库，也可以这样：
+        personal_token: ${{ secrets.ACCESS_TOKEN }}
+        publish_dir: ./dist
+        # 如果您使用自定义域名，可以取消注释下一行
+        # cname: yourdomain.com
