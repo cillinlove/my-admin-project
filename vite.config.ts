@@ -7,6 +7,8 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // 部署到 GitHub Pages 时需要设置 base 为项目名
+  base: '/my-admin-project/',
   plugins: [
     vue(),
     vueJsx(),
